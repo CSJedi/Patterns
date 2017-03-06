@@ -1,15 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Factory
 {
-    class Program
+    abstract class Product
     {
-        static void Main(string[] args)
+        
+    }
+
+    class ConcreteProductA: Product
+    {
+        
+    }
+
+    class ConcreteProductB: Product
+    {
+        
+    }
+
+    abstract class Creator
+    {
+        public abstract Product FactoryMethod();
+    }
+
+    class ConcreteCreatorA : Creator
+    {
+        public override Product FactoryMethod()
         {
+            return new ConcreteProductA();
+        }
+    }
+
+    class ConcreteCreatorB: Creator
+    {
+        public override Product FactoryMethod()
+        {
+            return new ConcreteProductB();
         }
     }
 }
