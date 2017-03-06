@@ -24,6 +24,15 @@ namespace Factory
             Console.WriteLine("Wood house was built.");
         }
     }
+
+    class BrickHouse: House
+    {
+        public BrickHouse()
+        {
+            Console.WriteLine("Brick house was built.");
+        }
+    }
+
     //----------------------------------------
     abstract class Developer
     {
@@ -60,21 +69,36 @@ namespace Factory
 
         public override House Create()
         {
-            return  new WoodHouse();
+            return new WoodHouse();
         }
     }
 
+    class BrickDeveloper: Developer
+    {
+        public BrickDeveloper(string name) : base(name)
+        {
+        }
+
+        public override House Create()
+        {
+            return new BrickHouse();
+        }
+    }
     //----------------------------------------
     class Program
     {
         static void Main(string[] args)
         {
             Developer dev;
+
             dev = new PanelDeveloper("Panel house builder");
             House firstHouse = dev.Create();
 
             dev = new WoodDeveloper("Wood house builder");
-            House seconHouse = dev.Create();
+            House secondHouse = dev.Create();
+
+            dev = new BrickDeveloper("Brick house builder");
+            House thirdHouse = dev.Create();
 
             Console.ReadKey();
         }
