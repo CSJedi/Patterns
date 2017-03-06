@@ -3,39 +3,80 @@
 
 namespace Factory
 {
-    abstract class Product
+    abstract class House
     {
-        
+
     }
 
-    class ConcreteProductA: Product
+    //----------------------------------------
+    class PanelHouse: House
     {
-        
-    }
-
-    class ConcreteProductB: Product
-    {
-        
-    }
-
-    abstract class Creator
-    {
-        public abstract Product FactoryMethod();
-    }
-
-    class ConcreteCreatorA : Creator
-    {
-        public override Product FactoryMethod()
+        public PanelHouse()
         {
-            return new ConcreteProductA();
+            Console.WriteLine("Panel house was built.");
         }
     }
 
-    class ConcreteCreatorB: Creator
+    class WoodHouse: House
     {
-        public override Product FactoryMethod()
+        public WoodHouse()
         {
-            return new ConcreteProductB();
+            Console.WriteLine("Wood house was built.");
+        }
+    }
+    //----------------------------------------
+    abstract class Developer
+    {
+        public string Name { get; set; }
+
+        public Developer(string name)
+        {
+            Name = name;
+        }
+
+        abstract public House Create();
+    }
+
+    //----------------------------------------
+    class PanelDeveloper: Developer
+    {
+        public PanelDeveloper(string name) : base(name)
+        {
+
+        }
+
+        public override House Create()
+        {
+            return new PanelHouse();
+        }
+    }
+
+    class WoodDeveloper: Developer
+    {
+        public WoodDeveloper(string name) : base(name)
+        {
+
+        }
+
+        public override House Create()
+        {
+            return  new WoodHouse();
+        }
+    }
+
+    //----------------------------------------
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Developer dev;
+            dev = new PanelDeveloper("Panel house builder");
+            House firstHouse = dev.Create();
+
+            dev = new WoodDeveloper("Wood house builder");
+            House seconHouse = dev.Create();
+
+            Console.ReadKey();
         }
     }
 }
