@@ -11,15 +11,18 @@ namespace Prototype
     {
         IAnimal Clone();
         void GetInfo();
+        bool State { get; set; }
+        string Name { get; set; }
+        int Age { get; set; }
     }
 
 
     //---------------------------------------
     class Monkey : IAnimal
     {
-        bool State;
-        string Name;
-        int Age;
+        public bool State { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
 
         public Monkey(bool state, string name, int age)
         {
@@ -29,7 +32,8 @@ namespace Prototype
         }
         public IAnimal Clone()
         {
-            return new Monkey(this.State, this.Name, this.Age);
+            //return new Monkey(this.State, this.Name, this.Age);
+            return this.MemberwiseClone() as IAnimal;
         }
 
         public void GetInfo()
@@ -41,10 +45,10 @@ namespace Prototype
 
     class Panda: IAnimal
     {
-        bool State;
-        string Name;
-        int Age;
-        int SleepHours;
+        public bool State { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public int SleepHours { get; set; }
         public Panda(bool state, string name, int age, int sleepHours)
         {
             this.State = state;
@@ -65,7 +69,8 @@ namespace Prototype
 
         public IAnimal Clone()
         {
-            return new Panda(this.State, this.Name, this.Age, this.SleepHours);
+            //return new Panda(this.State, this.Name, this.Age, this.SleepHours);
+            return this.MemberwiseClone() as IAnimal;
         }
     }
 
@@ -80,8 +85,9 @@ namespace Prototype
             animal.GetInfo();
             clonedAnimal.GetInfo();
 
-            animal = new Panda(false,"Ricky",6, 12);
+            animal = new Panda(false, "Ricky", 6, 12);
             clonedAnimal = animal.Clone();
+            animal.Name = "Lily";
             animal.GetInfo();
             clonedAnimal.GetInfo();
 
