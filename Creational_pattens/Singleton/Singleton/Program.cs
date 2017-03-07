@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Singleton
@@ -11,11 +12,19 @@ namespace Singleton
         static void Main(string[] args)
         {
             Person person = new Person();
-            person.Launch("999999999999999999999999999");
+            (
+                new Thread(
+                    () =>
+                    {
+                        person.Launch();
+                        Console.WriteLine(person.IIN.Code);
+                    }
+                )
+            ).Start();
+
+            person.IIN = IIN.getInstance();
             Console.WriteLine(person.IIN.Code);
 
-            person.IIN = IIN.getInstance("888888888888888");
-            Console.WriteLine(person.IIN.Code);
             Console.ReadKey();
         }
     }
@@ -25,28 +34,26 @@ namespace Singleton
     {
         public IIN IIN { get; set; }
 
-        public void Launch(string code)
+        public void Launch()
         {
-            this.IIN = IIN.getInstance(code);
+            this.IIN = IIN.getInstance();
         }
     }
 
     //-------------------------------------------
     class IIN
     {
-        private static IIN instance;
+        private static readonly IIN instance = new IIN();
         public string Code { get; private set; }
 
-        protected IIN(string code)
+        private IIN()
         {
-            this.Code = code;
+            this.Code = System.Guid.NewGuid().ToString(); ;
         }
 
-        public static IIN getInstance(string code)
+      
+        public static IIN getInstance()
         {
-            if(instance == null)
-                instance = new IIN(code);
-
             return instance;
         }
     }
