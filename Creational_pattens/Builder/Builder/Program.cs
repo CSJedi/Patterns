@@ -1,77 +1,137 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace Builder
 {
-    class Product
+    class Flour
     {
-        List<object> parts = new List<object>();
-
-        public void Add(string part)
-        {
-            parts.Add(part);
-        }
-    }
-    abstract class Buider
-    {
-        public abstract void BuildPartA();
-        public abstract void BuildPartB();
-        public abstract void BuildPartC();
-        public abstract Product GetResult();
-
+        public string Sort { get; set; }
     }
 
-    class ConcreteBuilder : Buider
+    class Sugar
     {
-        Product product = new Product();
-        public override void BuildPartA()
-        {
-            product.Add("Part A");
-        }
+        public string Sort { get; set; }
+    }
 
-        public override void BuildPartB()
-        {
-            product.Add("Part B");
-        }
+    class Cream
+    {
+        public string Name { get; set; }
+    }
 
-        public override void BuildPartC()
-        {
-            product.Add("Part C");
-        }
+    class Cake
+    {
+        public Flour WheatFlour { get; set; }
+        public Sugar Sugar { get; set; }
 
-        public override Product GetResult()
+        public Cream ChocolateCream { get; set; }
+        public Cream VanillaCream { get; set; }
+
+        public string Combine()
         {
-            return product;
+            StringBuilder sb = new StringBuilder();
+
+            if (WheatFlour != null)
+                sb.Append("Wheat flour:" + WheatFlour.Sort + "\n");
+            if (Sugar != null)
+                sb.Append("Sugar \n");
+            if (ChocolateCream != null)
+                sb.Append("Cream: " + ChocolateCream.Name + "\n");
+            if (VanillaCream != null)
+                sb.Append("Cream: " + VanillaCream.Name + "\n");
+
+            return sb.ToString();
         }
     }
 
-
-    class Director
+    abstract class CakeBuilder
     {
-        Buider builder;
+        public Cake Cake { get; set; }
 
-        public Director(Buider builder)
+        public void CreateCake()
         {
-            this.builder = builder;
+            Cake = new Cake();
         }
 
-        public void Construct()
+        public abstract void SetWheatFlour();
+        public abstract void SetSugar();
+        public abstract void SetChocolateCream();
+        public abstract void SetVanillaCream();
+    }
+
+    class Baker
+    {
+        public Cake Bake(CakeBuilder cakeBuilder)
         {
-            builder.BuildPartA();
-            builder.BuildPartB();
-            builder.BuildPartC();
+            cakeBuilder.CreateCake();
+            cakeBuilder.SetWheatFlour();
+            cakeBuilder.SetSugar();
+            cakeBuilder.SetVanillaCream();
+            cakeBuilder.SetChocolateCream();
+            return cakeBuilder.Cake;
         }
     }
 
-    class Client
+    class VanillaCakeBuilder: CakeBuilder
     {
-        void Main()
+        public override void SetChocolateCream()
         {
-            Buider buider = new ConcreteBuilder();
-            Director director = new Director(buider);
-            director.Construct();
-            Product product = buider.GetResult();
+            //do not use
+        }
+
+        public override void SetWheatFlour()
+        {
+            this.Cake.WheatFlour = new Flour() {Sort = "first sort"};
+        }
+
+        public override void SetSugar()
+        {
+            this.Cake.Sugar = new Sugar();
+        }
+   
+        public override void SetVanillaCream()
+        {
+            this.Cake.VanillaCream = new Cream() {Name = "Super vanilla"};
+        }
+    }
+    class ChocolateCakeBuilder : CakeBuilder
+    {
+        public override void SetChocolateCream()
+        {
+            this.Cake.ChocolateCream = new Cream() { Name = "Super choco" };
+        }
+
+        public override void SetWheatFlour()
+        {
+            this.Cake.WheatFlour = new Flour() { Sort = "first sort" };
+        }
+
+        public override void SetSugar()
+        {
+            this.Cake.Sugar = new Sugar();
+        }
+
+        public override void SetVanillaCream()
+        {
+            //do not use 
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Baker baker = new Baker();
+            CakeBuilder builder = new VanillaCakeBuilder();
+            Cake vanillaCake = baker.Bake(builder);
+            Console.WriteLine(vanillaCake.Combine());
+
+            builder = new ChocolateCakeBuilder();
+            Cake chocoCake = baker.Bake(builder);
+            Console.WriteLine(chocoCake.Combine());
+
+            Console.ReadLine();
         }
     }
 }
