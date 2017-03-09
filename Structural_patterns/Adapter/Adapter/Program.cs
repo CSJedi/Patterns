@@ -3,36 +3,66 @@
 
 namespace Adapter
 {
-    class Target
+    //-------------------------------------------------
+    interface ITransport
     {
-        public virtual void Request()
-        {
-            
-        }
-    }
-    class Client
-    {
-        public void Request(Target target)
-        {
-            target.Request();
-        }
+        void Drive();
     }
 
-    class Adapter: Target
+    class Auto: ITransport
     {
-        private Adaptee adaptee = new Adaptee();
-
-        public override void Request()
+        public void Drive()
         {
-            adaptee.SpecificRequest();
+            Console.WriteLine("Car rides.");
         }
     }
 
-    class Adaptee 
+    //-------------------------------------------------
+    class Driver
     {
-        public void SpecificRequest()
+        public void Travel(ITransport transport)
         {
-            
+            transport.Drive();
+        }
+    }
+    class Yacht
+    {
+        public void Swimm()
+        {
+            Console.WriteLine("Yacht swimm.");
+        }
+    }
+
+    //-------------------------------------------------
+    class YachtToAutoAdapter: ITransport
+    {
+        Yacht yacht;
+
+        public YachtToAutoAdapter(Yacht yacht)
+        {
+            this.yacht = yacht;
+        }
+
+        public void Drive()
+        {
+            yacht.Swimm();
+        }
+    }
+
+    //-------------------------------------------------
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Auto auto = new Auto();
+            Driver driver = new Driver();
+            driver.Travel(auto);
+
+            Yacht yacht = new Yacht();
+            ITransport yachtAuto = new YachtToAutoAdapter(yacht);
+            driver.Travel(yachtAuto);
+
+            Console.ReadLine();
         }
     }
 }
