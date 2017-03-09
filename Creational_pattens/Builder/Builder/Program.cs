@@ -20,6 +20,7 @@ namespace Builder
         public string Name { get; set; }
     }
 
+    //--------------------------------------------------
     class Cake
     {
         public Flour WheatFlour { get; set; }
@@ -45,6 +46,7 @@ namespace Builder
         }
     }
 
+    //--------------------------------------------------
     abstract class CakeBuilder
     {
         public Cake Cake { get; set; }
@@ -60,6 +62,7 @@ namespace Builder
         public abstract void SetVanillaCream();
     }
 
+    //--------------------------------------------------
     class Baker
     {
         public Cake Bake(CakeBuilder cakeBuilder)
@@ -73,7 +76,8 @@ namespace Builder
         }
     }
 
-    class VanillaCakeBuilder: CakeBuilder
+    //--------------------------------------------------
+    class VanillaCakeBuilder : CakeBuilder
     {
         public override void SetChocolateCream()
         {
@@ -118,6 +122,7 @@ namespace Builder
         }
     }
 
+    //--------------------------------------------------
     class Program
     {
         static void Main(string[] args)
