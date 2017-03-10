@@ -1,15 +1,14 @@
 ﻿using System;
 
-
 namespace Adapter
 {
     //-------------------------------------------------
-    interface ITransport
+    internal interface ITransport
     {
         void Drive();
     }
 
-    class Auto: ITransport
+    internal class Auto : ITransport
     {
         public void Drive()
         {
@@ -18,25 +17,26 @@ namespace Adapter
     }
 
     //-------------------------------------------------
-    class Driver
+    internal class Driver
     {
         public void Travel(ITransport transport)
         {
             transport.Drive();
         }
     }
-    class Yacht
+
+    internal class Yacht
     {
         public void Swimm()
-        {
+        { 
             Console.WriteLine("Yacht swimm.");
         }
     }
 
     //-------------------------------------------------
-    class YachtToAutoAdapter: ITransport
+    internal class YachtToAutoAdapter : ITransport
     {
-        Yacht yacht;
+        private readonly Yacht yacht;
 
         public YachtToAutoAdapter(Yacht yacht)
         {
@@ -50,15 +50,15 @@ namespace Adapter
     }
 
     //-------------------------------------------------
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Auto auto = new Auto();
-            Driver driver = new Driver();
+            var auto = new Auto();
+            var driver = new Driver();
             driver.Travel(auto);
 
-            Yacht yacht = new Yacht();
+            var yacht = new Yacht(); 
             ITransport yachtAuto = new YachtToAutoAdapter(yacht);
             driver.Travel(yachtAuto);
 

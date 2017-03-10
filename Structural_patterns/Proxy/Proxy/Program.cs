@@ -2,39 +2,79 @@
 
 namespace Proxy
 {
-    class Client
+    public interface IMath
     {
-        void Main()
+        double Add(double x, double y);
+        double Subtract(double x, double y);
+        double Multiply(double x, double y);
+        double Divide(double x, double y);
+    }
+
+    //--------------------------------------------
+    class Math: IMath
+    {
+        public double Add(double x, double y)
         {
-            Subject subject = new Proxy();
-            subject.Request();
+            return x + y;
+        }
+
+        public double Subtract(double x, double y)
+        {
+            return x - y;
+        }
+
+        public double Multiply(double x, double y)
+        {
+            return x * y;
+        }
+
+        public double Divide(double x, double y)
+        {
+            return x / y;
         }
     }
 
-    //-----------------------------------------
-    abstract class Subject
+    //--------------------------------------------
+    class MathProxy: IMath
     {
-        public abstract void Request();
-    }
+        private Math _math = new Math();
 
-    class RealSubject: Subject
-    {
-        public override void Request()
+        public double Add(double x, double y)
         {
-            
+            return _math.Add(x, y);
+        }
+
+        public double Subtract(double x, double y)
+        {
+            return _math.Subtract(x, y);
+        }
+
+        public double Multiply(double x, double y)
+        {
+            return _math.Multiply(x, y);
+        }
+
+        public double Divide(double x, double y)
+        {
+            return _math.Divide(x, y);
         }
     }
 
-    //-----------------------------------------
-    class Proxy : Subject
+    class Program
     {
-        RealSubject realSubject;
-        public override void Request()
+        static void Main()
         {
-            if(realSubject == null)
-                realSubject = new RealSubject();
+            MathProxy proxy = new MathProxy();
 
-            realSubject.Request();
+            double x = 6;
+            double y = 7; 
+
+            Console.WriteLine(x + " + " + y + " = " + proxy.Add(x, y));
+            Console.WriteLine(x + " - " + y + " = " + proxy.Subtract(x, y));
+            Console.WriteLine(x + " * " + y + " = " + proxy.Multiply(x, y));
+            Console.WriteLine(x + " / " + y + " = " + proxy.Divide(x, y));
+
+            Console.ReadLine();
         }
     }
 }
